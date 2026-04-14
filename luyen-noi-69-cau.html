@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luyện Nói Tiếng Anh — 69 Câu Hỏi</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh;padding:24px 16px}
+  .container{max-width:720px;margin:0 auto}
+  h1{font-size:22px;font-weight:600;margin-bottom:6px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:20px}
+  .topics{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+  .tbtn{padding:6px 14px;font-size:12px;border:1px solid #d0cfc8;border-radius:20px;background:#fff;color:#555;cursor:pointer;transition:all .15s}
+  .tbtn:hover{background:#eee}
+  .tbtn.active{background:#dbeafe;border-color:#3b82f6;color:#1d4ed8;font-weight:500}
+  .mrow{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+  .mlbl{font-size:13px;color:#666}
+  .mbtn{padding:5px 13px;font-size:12px;border:1px solid #d0cfc8;border-radius:16px;background:#fff;color:#555;cursor:pointer;transition:all .15s}
+  .mbtn.active{background:#fef3c7;border-color:#d97706;color:#92400e;font-weight:500}
+
+  /* Voice panel */
+  .voice-panel{background:#fff;border:1px solid #e5e4df;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .voice-panel label{font-size:12px;color:#666;font-weight:500;white-space:nowrap}
+  .voice-select{flex:1;min-width:180px;padding:6px 10px;font-size:13px;border:1px solid #d0cfc8;border-radius:8px;background:#fff;color:#333;cursor:pointer;outline:none}
+  .voice-select:focus{border-color:#3b82f6}
+  .speed-wrap{display:flex;align-items:center;gap:8px}
+  .speed-wrap label{font-size:12px;color:#666;white-space:nowrap}
+  .speed-slider{width:90px;accent-color:#3b82f6;cursor:pointer}
+  .speed-val{font-size:12px;color:#3b82f6;font-weight:600;min-width:28px}
+
+  .card{background:#fff;border:1px solid #e5e4df;border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .qmeta{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .qtag{padding:3px 11px;border-radius:12px;font-size:11px;font-weight:600;letter-spacing:.3px}
+  .qnum{font-size:12px;color:#999}
+  .qtxt{font-size:17px;font-weight:600;color:#111;line-height:1.5;margin-bottom:16px}
+  .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .btn{padding:8px 15px;font-size:13px;border:1px solid #d0cfc8;border-radius:8px;background:#fff;color:#333;cursor:pointer;transition:all .15s}
+  .btn:hover{background:#f5f5f5}
+  .btnp{background:#3b82f6;border-color:#3b82f6;color:#fff}
+  .btnp:hover{background:#2563eb}
+
+  /* TTS button */
+  .btn-tts{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;font-size:13px;border:1px solid #d0cfc8;border-radius:8px;background:#fff;color:#333;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+  .btn-tts:hover{background:#f0f7ff;border-color:#3b82f6;color:#1d4ed8}
+  .btn-tts.speaking{background:#eff6ff;border-color:#3b82f6;color:#1d4ed8;animation:pulse-border 1.2s ease-in-out infinite}
+  .btn-tts.speaking .tts-icon{animation:spin-wave 1s linear infinite}
+  @keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.3)}50%{box-shadow:0 0 0 4px rgba(59,130,246,.1)}}
+  @keyframes spin-wave{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
+  .tts-icon{font-size:15px;line-height:1}
+  .tts-label{font-size:13px}
+
+  .hbox{margin-top:14px;background:#f0f7ff;border-radius:10px;padding:14px;border-left:3px solid #3b82f6;display:none}
+  .hbox.on{display:block}
+  .htitle{font-size:11px;font-weight:700;color:#1d4ed8;margin-bottom:8px;text-transform:uppercase;letter-spacing:.6px}
+  .hline{font-size:13px;color:#374151;line-height:1.85}
+  .sbox{margin-top:14px;background:#f0fdf4;border-radius:10px;padding:14px;display:none}
+  .sbox.on{display:block}
+  .stitle{font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px;text-transform:uppercase;letter-spacing:.6px}
+  .stxt{font-size:13px;color:#14532d;line-height:1.85}
+  .navrow{display:flex;align-items:center;justify-content:space-between}
+  .prog{font-size:13px;color:#999}
+  .navbtns{display:flex;gap:8px}
+  .welcome{text-align:center;padding:3rem 1rem;color:#aaa;font-size:15px;background:#fff;border-radius:14px;border:1px solid #e5e4df}
+  .counter{display:inline-block;background:#e5e4df;color:#555;font-size:10px;padding:1px 7px;border-radius:10px;margin-left:4px;font-weight:600}
+  .no-voice{font-size:12px;color:#f59e0b;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:6px 12px;margin-bottom:12px;display:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🗣️ Luyện nói tiếng Anh</h1>
+  <p class="subtitle">69 câu hỏi theo 12 chủ đề — Chọn chủ đề, đọc to câu hỏi rồi tự trả lời!</p>
+
+  <div class="topics" id="tp"></div>
+
+  <div class="mrow">
+    <span class="mlbl">Thứ tự:</span>
+    <button class="mbtn active" id="bord" onclick="setMode('order')">Tuần tự</button>
+    <button class="mbtn" id="bran" onclick="setMode('random')">Ngẫu nhiên</button>
+  </div>
+
+  <!-- Voice panel -->
+  <div class="voice-panel" id="voicePanel">
+    <label>🔊 Giọng đọc:</label>
+    <select class="voice-select" id="voiceSel" onchange="onVoiceChange()" title="Chọn giọng đọc">
+      <option value="">Đang tải giọng...</option>
+    </select>
+    <div class="speed-wrap">
+      <label>Tốc độ:</label>
+      <input type="range" class="speed-slider" id="speedSlider" min="0.5" max="1.5" step="0.05" value="0.9" oninput="onSpeedChange()" title="Adjust playback speed">
+      <span class="speed-val" id="speedVal">0.9×</span>
+    </div>
+  </div>
+  <div class="no-voice" id="noVoice">⚠️ Trình duyệt này không hỗ trợ đọc giọng. Hãy thử Chrome hoặc Edge.</div>
+
+  <div id="area"><div class="welcome">👆 Chọn một chủ đề để bắt đầu!</div></div>
+</div>
+
+<script>
+/* ─── DATA ─── */
+var H={
+  freq:['<b>Stating Frequency</b>','&bull; "On a daily basis" / "Almost every single day"','&bull; "Every once in a while" / "From time to time"','&bull; "Hardly ever" / "Once in a blue moon"','&bull; "I [action] quite frequently. In fact, I\'d say I do it [frequency]."'],
+  pref:['<b>Expressing Preferences</b>','&bull; "I\'m a big fan of..." / "I\'m absolutely crazy about..."','&bull; "I much prefer [A] over [B] because..."','&bull; "Given the choice, I\'d definitely go for..."','&bull; "When it comes to [topic], I tend to prefer [Option A]."'],
+  reas:['<b>Giving Reasons</b>','&bull; "The main reason for this is that..."','&bull; "First and foremost..." / "On top of that..."','&bull; "Another thing to consider is..."','&bull; "There are a couple of reasons. The main one is [R1]. Furthermore, [R2]."'],
+  past:['<b>Past Experiences</b>','&bull; "The last time I [did X] was actually [time] ago."','&bull; "I vividly remember..."','&bull; "It\'s been a while, but the last time was..."'],
+  sugg:['<b>Giving Suggestions</b>','&bull; "I would highly recommend..."','&bull; "You should definitely check out..."','&bull; "Not only is it [benefit 1], but it\'s also [benefit 2]."']
+};
+var BT=['','<b>Buying time (mua thời gian suy nghĩ)</b>','&bull; "That\'s an interesting question..."','&bull; "Let me think about that for a second..."','&bull; "To be completely honest with you..."','&bull; "Off the top of my head, I\'d say..."','&bull; "Well, I\'d have to say that..."'];
+
+var topics=[
+{name:"Food & Dining",c:"#fff1ee",t:"#b33d22",qs:[
+{n:1,q:"What kinds of food do you typically eat on a daily basis?",h:"freq",s:"On a daily basis, I tend to eat pretty simple meals. For breakfast, I usually have rice or bread with eggs. I'm a big fan of Vietnamese food, so lunch is often pho or com tam. To be completely honest, I don't cook much — I rely on food delivery services quite often."},
+{n:2,q:"How often do you use food delivery services?",h:"freq",s:"I use food delivery apps quite frequently — almost every single day, in fact. The main reason is convenience. On top of that, there's a huge variety of options available, so I never get bored with my meals."},
+{n:3,q:"Can you describe the dish or cuisine you enjoy the most?",h:"pref",s:"I'm absolutely crazy about Japanese food, especially ramen. A prime example would be tonkotsu ramen — rich, creamy broth that I find incredibly satisfying. I much prefer it over other noodle dishes because of the depth of flavor."},
+{n:4,q:"What dish did you make the last time you cooked a meal?",h:"past",s:"The last time I cooked was actually about a week ago. I vividly remember making fried rice with eggs and vegetables — it's quick, easy, and I can customize it however I want."},
+{n:5,q:"Where do you usually find instructions for making new dishes, and why?",h:"pref",s:"I usually find recipes on YouTube. The main reason is that video tutorials are much easier to follow than written ones. For instance, just the other day I was watching a tutorial on how to make banh mi at home."},
+{n:6,q:"Are you interested in watching cooking shows? Why or why not?",h:"pref",s:"I'm quite interested in cooking shows, actually. When it comes to entertainment, I tend to prefer shows that are educational and exciting — cooking competitions like MasterChef offer both, and they inspire me to try new recipes."},
+{n:7,q:"How often do you eat at restaurants instead of cooking meals at home?",h:"freq",s:"I eat out every once in a while, maybe two or three times a week. Given the choice, I'd prefer eating out because the food quality is usually better. Another thing to consider is that it saves a lot of time."},
+{n:8,q:"What factors are most important to you when choosing a new place to dine out?",h:"reas",s:"There are a couple of factors I consider. The main one is food quality — I want the meal to be worth the price. Furthermore, atmosphere matters a lot. I lean towards cozy, quiet places where I can have a good conversation with friends."}
+]},
+{name:"Travel & Transport",c:"#edfaf3",t:"#0a5e47",qs:[
+{n:9,q:"How frequently do you take trips to other countries?",h:"freq",s:"Honestly, I travel abroad once in a blue moon — maybe once a year if I'm lucky. The main reason is cost. International travel can be quite expensive, so I have to save up for it in advance."},
+{n:10,q:"Which foreign countries have you travelled to, or hope to travel to in the future?",h:"past",s:"I've been to Thailand and Singapore. In the future, I'd absolutely love to visit Japan. I'm a big fan of Japanese culture, and what draws me most is the blend of ancient temples and cutting-edge modern life."},
+{n:11,q:"What main factors help you decide where to go on vacation?",h:"reas",s:"First and foremost, budget is the biggest factor. On top of that, I consider the climate and available activities. Given the choice, I'd definitely go somewhere with great food and beautiful natural scenery."},
+{n:12,q:"How do you normally commute to your workplace or school?",h:"freq",s:"As a rule, I usually commute by motorbike. It's the most convenient option in Hanoi. Now and then I'll take a taxi if the weather is bad, but that's not very common for me."},
+{n:13,q:"What are the main advantages of using public transportation in your city?",h:"reas",s:"There are a couple of advantages. The main one is cost — buses and the metro are much cheaper than taxis. Furthermore, public transport helps reduce traffic congestion, which is a major issue in Hanoi."},
+{n:14,q:"Do you think riding bicycles will become more popular in your area in the future?",h:"reas",s:"That's an interesting question. I think cycling will gradually become more popular, mainly because people are becoming more health-conscious. Another thing to consider is that the government has been building more dedicated bike lanes recently."}
+]},
+{name:"Books & Reading",c:"#f0effe",t:"#4338a0",qs:[
+{n:15,q:"How much time do you spend reading books?",h:"freq",s:"To be completely honest with you, I don't read as much as I'd like to. I'd say I spend maybe 30 minutes reading before bed. I'd like to read more, but work and social media tend to take up most of my free time."},
+{n:16,q:"Where do you prefer to purchase books: at physical stores or on the internet?",h:"pref",s:"I much prefer buying books online. The main reason is convenience — I can browse thousands of titles without leaving my house. On top of that, online prices are usually lower than in physical stores."},
+{n:17,q:"What do you think are the main advantages of reading?",h:"reas",s:"There are several advantages. First and foremost, reading improves your vocabulary and critical thinking. Another thing to consider is that it expands your worldview and empathy. For instance, reading novels has made me much more understanding of other people."},
+{n:18,q:"What is the best location in your neighborhood to purchase study materials, and have you shopped there?",h:"sugg",s:"I would highly recommend the bookshops near the National University in Cau Giay. I've been there several times. Not only do they have a wide variety of study materials, but the prices are also very reasonable."},
+{n:19,q:"Is purchasing textbooks from online retailers a good option in your opinion?",h:"pref",s:"I think it's a great option and I highly recommend it. The main reason is price — online retailers often sell at a significant discount. On top of that, delivery is usually fast and very convenient."},
+{n:20,q:"Do you prefer e-books or paper books, and why?",h:"pref",s:"I lean towards paper books. When it comes to reading, I tend to prefer the physical experience — the feel of the pages and the absence of screen glare. That said, e-books are convenient for travel, so I use both depending on the situation."}
+]},
+{name:"Health & Sports",c:"#f0fce8",t:"#2d6b0d",qs:[
+{n:21,q:"How frequently do you work out or do physical activities?",h:"freq",s:"I work out from time to time — about three times a week. I do a mix of running and gym exercises. Honestly, I could be more consistent, but it's hard to find the motivation after a long day at work."},
+{n:22,q:"Which nutritious foods are a regular part of your diet?",h:"pref",s:"I try to eat healthily, so vegetables and fruits are a regular part of my diet. I'm a big fan of avocados and leafy greens. On a daily basis, I also make sure to drink plenty of water and avoid sugary drinks."},
+{n:23,q:"Tell me about the physical exercise you like doing the most.",h:"pref",s:"The exercise I enjoy the most is jogging. The main reason is that it clears my mind — it's almost like meditation. I vividly remember how much better I felt mentally and physically after I started running regularly last year."},
+{n:24,q:"Which sports do you prefer to participate in or watch on television?",h:"pref",s:"Given the choice, I'd definitely watch football over any other sport. I'm absolutely crazy about the Premier League. For participating, I prefer badminton because it's social and easy to play with friends at any skill level."},
+{n:25,q:"What are the main pros and cons of participating in team sports?",h:"reas",s:"There are a couple of pros. The main one is that team sports teach communication and cooperation. On top of that, they're more motivating. However, a prime con would be scheduling conflicts — it can be hard to coordinate with multiple people regularly."},
+{n:26,q:"How frequently do you go for a walk to stay fit?",h:"freq",s:"I go for walks now and then, maybe a few times a week. I usually walk after dinner. It's a habit I picked up recently, and I've found it really helps me sleep better and reduces stress after a busy day."},
+{n:27,q:"Where do you often go to take a walk, and why?",h:"pref",s:"I often walk around Hoan Kiem Lake when I have the chance. The main reason is the atmosphere — it's peaceful and surrounded by trees, making a refreshing contrast to the noise of the city. I would absolutely recommend it to anyone in Hanoi."}
+]},
+{name:"Entertainment",c:"#fff0f5",t:"#8b2252",qs:[
+{n:28,q:"Which genres of films do you enjoy the most, and for what reason?",h:"pref",s:"I'm a big fan of thriller films. The main reason is the suspense — I love not knowing what's going to happen next. A prime example would be Parasite by Bong Joon-ho, which left me completely speechless after watching it."},
+{n:29,q:"How many times a month do you go out to the movie theater?",h:"freq",s:"I go to the movie theater once in a while — maybe once or twice a month. To be completely honest, streaming services have made me go less often. But I still enjoy the big-screen experience for action or sci-fi films."},
+{n:30,q:"Talk about a film you have seen that left a strong impression on you.",h:"past",s:"The film that left the strongest impression on me was Interstellar. I vividly remember being completely blown away by the visuals and the concept of time dilation. It made me think about space and human connection in a totally new way."},
+{n:31,q:"What genres of music do you listen to the most during your free time?",h:"pref",s:"During my free time, I mostly listen to indie pop and lo-fi music. When it comes to music, I tend to prefer mellow, relaxing sounds. It helps me focus when I'm working or studying, and it puts me in a calm mood."},
+{n:32,q:"Do you prefer listening to music privately with headphones or out loud through speakers?",h:"pref",s:"I much prefer using headphones. The main reason is the immersive sound quality — it feels like the music is all around you. On top of that, it means I don't disturb anyone around me, which is important in shared spaces."},
+{n:33,q:"Have you ever attended a live music concert? Tell me about the experience.",h:"past",s:"Yes, I have! The last time I attended a concert was about two years ago. I went to see a Vietnamese indie band, and it was a fantastic experience because the energy of the crowd was just incredible — something you can never replicate at home."},
+{n:34,q:"Approximately how many hours of television do you watch during an average week?",h:"freq",s:"I'd say I watch about five to eight hours of TV a week. I mostly watch in the evenings to wind down. I'm a big fan of Korean dramas and American series, so I usually watch a couple of episodes before bed."},
+{n:35,q:"Do you generally prefer watching educational documentaries or fictional dramas?",h:"pref",s:"I lean towards fictional dramas. The main reason is they're more emotionally engaging — I get invested in the characters. That said, I watch documentaries from time to time, especially about nature or history, which I find very fascinating."},
+{n:36,q:"How have streaming services changed the way people in your country consume media?",h:"reas",s:"That's an interesting question. Streaming services have completely transformed media consumption. First and foremost, people no longer follow broadcast schedules — they watch on demand. Another major change is the exposure to international content, which has influenced Vietnamese fashion, language, and culture significantly."}
+]},
+{name:"Shopping",c:"#f7f6f1",t:"#4a4940",qs:[
+{n:37,q:"How often do you visit convenience shops?",h:"freq",s:"I visit convenience stores almost every single day — mainly Circle K or GS25 near my place. I usually pop in to grab a drink or a snack. They're incredibly accessible, which makes them hard to avoid in daily city life."},
+{n:38,q:"What types of items do you typically purchase from these small stores?",h:"pref",s:"I typically buy drinks, instant noodles, and snacks. Every once in a while, I'll pick up basic necessities like toiletries. The main reason I shop there is speed — I can be in and out in under two minutes."},
+{n:39,q:"Would you recommend doing daily shopping at a convenience store instead of a large supermarket?",h:"sugg",s:"For daily essentials, I'd recommend convenience stores for their speed and accessibility. However, for weekly groceries, I'd suggest going to a supermarket. Not only are the prices lower, but the variety is also much greater."},
+{n:40,q:"How often do you go shopping for clothes or accessories?",h:"freq",s:"I go clothes shopping once in a while, maybe once a month or so. I lean towards shopping online these days because I can compare prices and styles much more easily than going from store to store in person."},
+{n:41,q:"Do you prefer shopping in large malls or small local shops? Why?",h:"pref",s:"I'm a big fan of large malls because everything is in one place, and they're air-conditioned — a big plus in Hanoi's summer heat. That said, small local shops have a charm and uniqueness that malls simply can't replicate."},
+{n:42,q:"What is the most expensive item you have purchased recently?",h:"past",s:"The most expensive item I've purchased recently was a new laptop, about two months ago. I vividly remember spending a long time researching before buying it. The main reason I chose that particular model was its battery life and performance."}
+]},
+{name:"Technology",c:"#edf5ff",t:"#1a4f8a",qs:[
+{n:43,q:"How much time do you spend using a smartphone every day?",h:"freq",s:"To be completely honest, I spend way too much time on my phone — probably four to five hours a day. I use it for work, social media, and entertainment. I've tried to cut down, but it's become such an integral part of daily life."},
+{n:44,q:"What are the most useful mobile applications on your phone?",h:"pref",s:"Off the top of my head, I'd say Google Maps, Zalo, and Grab are the most useful. The main reason I rely on Google Maps is that I'm always navigating the city. Grab is indispensable for food delivery and getting around."}
+]},
+{name:"Work & Education",c:"#f3f0ff",t:"#3b2d8f",qs:[
+{n:45,q:"Do you prefer working independently or as part of a team? Why?",h:"pref",s:"Well, I'd have to say it depends on the task. For creative work, I much prefer working independently because I can focus without distractions. However, for complex projects, I lean towards teamwork because diverse perspectives lead to much better outcomes."},
+{n:46,q:"Describe what your ideal work environment would look like.",h:"pref",s:"My ideal work environment would be a quiet, well-lit open space with a good coffee machine nearby. I'm a big fan of flexible hours — I tend to be most productive in the morning. The main thing I value is a team that communicates openly and respects each other's boundaries."},
+{n:47,q:"What subject did you enjoy the most when you were in school?",h:"past",s:"I vividly remember enjoying English class the most. The main reason was the teacher — she made lessons interactive and fun. On top of that, I found the subject practical and directly applicable to real life, which motivated me to study much harder."},
+{n:48,q:"Do you think online learning is as effective as traditional classroom learning?",h:"reas",s:"That's an interesting question. I think online learning can be just as effective, but it depends heavily on the learner's discipline. First and foremost, the flexibility is a major advantage. However, the lack of face-to-face interaction can make it harder to stay motivated."}
+]},
+{name:"Hobbies & Free Time",c:"#fffbeb",t:"#7c4a0a",qs:[
+{n:49,q:"What is a hobby you have recently started?",h:"past",s:"I recently started learning watercolor painting, about three months ago. Off the top of my head, I'd say the most enjoyable part is that it forces me to slow down and be present in the moment — a welcome break from constant screen time."},
+{n:50,q:"How do you usually spend your free time on the weekends?",h:"freq",s:"On weekends, I usually sleep in, then go out for a nice brunch with friends. In the afternoon, I like to explore new cafes or walk around the city. Every once in a while, I'll catch a movie in the evening to wrap up the day."}
+]},
+{name:"Weather & Home",c:"#edfaf3",t:"#064e3b",qs:[
+{n:51,q:"What is your favorite season of the year, and why?",h:"pref",s:"My favorite season is autumn. I'm absolutely crazy about the cool, crisp weather and the golden colors. The main reason is that it feels energizing — I'm much more productive and motivated compared to the hot, humid summer months."},
+{n:52,q:"How does the weather usually affect your mood and daily activities?",h:"reas",s:"The weather has a significant impact on my mood. On a rainy day, I tend to feel more tired and less motivated to go out. The main reason is probably the lack of sunlight, which affects energy levels. On sunny days, I'm far more active and positive."},
+{n:53,q:"Do you live in an apartment building or a house?",h:"pref",s:"I live in an apartment. The main advantage is the security and the facilities — we have a gym and a rooftop area. Given the choice, I'd stay in an apartment over a house because it's more practical for city living in Hanoi."},
+{n:54,q:"What do you like most about the neighborhood you live in?",h:"pref",s:"I live in Cau Giay, and what I like most is the convenience. There are tons of restaurants, coffee shops, and supermarkets within walking distance. To give you an idea, I can get almost anything I need without even getting on my motorbike."},
+{n:55,q:"If you could change one thing about your home, what would it be?",h:"pref",s:"If I could change one thing, I'd make the living room bigger. The main reason is that I love having friends over, but the space feels a bit cramped when there are more than four people. A larger common area would really improve the quality of home life."}
+]},
+{name:"Relationships",c:"#fff0f7",t:"#7b1d44",qs:[
+{n:56,q:"How often do you hang out with your close friends?",h:"freq",s:"I hang out with my close friends from time to time — maybe once or twice a week. We usually meet up for meals or coffee. I'd say maintaining these friendships is really important to me, especially after a stressful week at work."},
+{n:57,q:"What kinds of activities do you usually do when hanging out with your friends?",h:"pref",s:"We usually go out for food or drinks — I'm a big fan of trying new restaurants together. Every once in a while, we'll go to a movie or play badminton. The main thing is just spending quality time together rather than the specific activity."},
+{n:58,q:"In your opinion, what are the most important qualities of a good friend?",h:"reas",s:"I think the most important quality is reliability. The main reason is that a friend you can count on in difficult times is worth more than ten casual acquaintances. Furthermore, a sense of humor is really important to me — I love friends who can make me laugh even on my worst days."}
+]},
+{name:"Holidays & Pets",c:"#fff8f5",t:"#7a2c14",qs:[
+{n:59,q:"What is the most important national holiday in your country?",h:"pref",s:"Without a doubt, Tet — the Lunar New Year — is the most important holiday in Vietnam. It's a time when families reunite, visit ancestors' graves, and share traditional foods. I'm absolutely crazy about the festive atmosphere, the fireworks, and the smell of banh chung cooking."},
+{n:60,q:"How do you and your family usually celebrate traditional festivals?",h:"past",s:"We usually gather at my grandparents' house for Tet. I vividly remember the whole family cooking together — it's a wonderful tradition. We also give lucky money envelopes to the children and decorate the house with peach blossoms and kumquat trees."},
+{n:61,q:"Describe a memorable trip or event you experienced during a holiday break.",h:"past",s:"The most memorable holiday trip I've taken was to Da Nang with my college friends, about three years ago. I vividly remember arriving at My Khe Beach at sunset — the sky was breathtaking. It was fantastic because we had no fixed plans, which made everything feel spontaneous and exciting."},
+{n:62,q:"Do you currently have any pets, or did you have any when you were younger?",h:"past",s:"I had a dog when I was younger — a small beagle named Bong. The last time I saw him was about ten years ago before he passed away. I vividly remember how loyal and playful he was. I'd love to have a pet again, but my current apartment doesn't allow them."},
+{n:63,q:"What are the main benefits of raising a pet?",h:"reas",s:"There are a couple of key benefits. First and foremost, pets provide companionship and reduce loneliness, which is especially important for people who live alone. Furthermore, having a pet teaches responsibility and empathy, particularly for children growing up."},
+{n:64,q:"Why do you think some people strongly prefer keeping cats over dogs?",h:"reas",s:"That's an interesting question. I think the main reason is lifestyle. Cats are far more independent — they don't need to be walked or entertained constantly. Another thing to consider is space — cats are better suited to apartment living, which is very common in urban Vietnam."}
+]},
+{name:"Daily Life & Environment",c:"#f0fdf4",t:"#14532d",qs:[
+{n:65,q:"Are your weekdays and weekends different?",h:"pref",s:"They're very different. On weekdays, I follow a pretty strict routine — I wake up early, work all day, and try to go to bed at a reasonable hour. On weekends, I let go of the schedule completely and focus on rest and socializing with people I care about."},
+{n:66,q:"What is the very first thing you usually do when you wake up in the morning?",h:"freq",s:"To be completely honest, the first thing I do is check my phone. I know it's not the best habit. After that, I try to drink a glass of water before doing anything else. I've been trying to build a better morning routine lately."},
+{n:67,q:"How do you prefer to relax and unwind at the end of a long, busy day?",h:"pref",s:"I prefer to unwind by watching a show or listening to lo-fi music with a cup of tea. The main reason is that it helps me transition from work mode to rest mode. I'm a big fan of having a clear separation between work time and personal time."},
+{n:68,q:"What are some simple ways people can protect the environment in their daily lives?",h:"sugg",s:"I would highly recommend starting with reducing single-use plastic. Not only is it easy to do, but it also has a significant long-term impact. On top of that, using public transport or cycling instead of driving is something anyone can try, and it saves money too."},
+{n:69,q:"Do you usually make an effort to recycle plastic and paper waste at home?",h:"freq",s:"I try to, though I'll admit I could do better. I do separate paper and plastic from general waste. The main reason I started was after watching a documentary about ocean pollution — it really changed my perspective and motivated me to be more environmentally responsible."}
+]}
+];
+
+/* ─── STATE ─── */
+var cur=null, idx=0, mode='order', sh=[];
+
+/* ─── TTS ENGINE ─── */
+var synth = window.speechSynthesis;
+var voices = [];
+var selectedVoice = null;
+var currentSpeed = 0.9;
+var isSpeaking = false;
+
+function loadVoices() {
+  voices = synth.getVoices();
+  var sel = document.getElementById('voiceSel');
+
+  // Filter: prefer English voices; label clearly
+  var engVoices = voices.filter(function(v){ return v.lang.startsWith('en'); });
+  var otherVoices = voices.filter(function(v){ return !v.lang.startsWith('en'); });
+
+  if (engVoices.length === 0 && otherVoices.length === 0) {
+    document.getElementById('noVoice').style.display = 'block';
+    document.getElementById('voicePanel').style.display = 'none';
+    return;
+  }
+
+  sel.innerHTML = '';
+
+  // Group: English voices first
+  if (engVoices.length > 0) {
+    var grpEn = document.createElement('optgroup');
+    grpEn.label = '🇬🇧 Tiếng Anh';
+    engVoices.forEach(function(v, i) {
+      var opt = document.createElement('option');
+      opt.value = v.name;
+      // Flag by locale
+      var flag = v.lang === 'en-US' ? '🇺🇸' : v.lang === 'en-GB' ? '🇬🇧' : v.lang === 'en-AU' ? '🇦🇺' : '🌐';
+      opt.textContent = flag + ' ' + v.name + ' (' + v.lang + ')';
+      // Default: prefer Google US English, then any en-US
+      if (!selectedVoice && (v.name.toLowerCase().includes('google') && v.lang === 'en-US')) {
+        opt.selected = true;
+        selectedVoice = v;
+      }
+      grpEn.appendChild(opt);
+    });
+    // Fallback default
+    if (!selectedVoice && engVoices.length > 0) {
+      selectedVoice = engVoices[0];
+      grpEn.children[0].selected = true;
+    }
+    sel.appendChild(grpEn);
+  }
+
+  if (otherVoices.length > 0) {
+    var grpOther = document.createElement('optgroup');
+    grpOther.label = '🌐 Ngôn ngữ khác';
+    otherVoices.forEach(function(v) {
+      var opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = v.name + ' (' + v.lang + ')';
+      grpOther.appendChild(opt);
+    });
+    sel.appendChild(grpOther);
+  }
+
+  if (!selectedVoice && voices.length > 0) selectedVoice = voices[0];
+}
+
+function onVoiceChange() {
+  var name = document.getElementById('voiceSel').value;
+  selectedVoice = voices.find(function(v){ return v.name === name; }) || null;
+  stopSpeech();
+}
+
+function onSpeedChange() {
+  currentSpeed = parseFloat(document.getElementById('speedSlider').value);
+  document.getElementById('speedVal').textContent = currentSpeed.toFixed(2).replace(/\.?0+$/,'') + '×';
+  stopSpeech();
+}
+
+function stopSpeech() {
+  if (synth.speaking || synth.pending) synth.cancel();
+  isSpeaking = false;
+  updateTTSBtn();
+}
+
+function speakQuestion(text) {
+  if (!synth) return;
+  if (synth.speaking || synth.pending) {
+    synth.cancel();
+    isSpeaking = false;
+    updateTTSBtn();
+    return;
+  }
+  var utt = new SpeechSynthesisUtterance(text);
+  utt.rate = currentSpeed;
+  utt.pitch = 1;
+  utt.volume = 1;
+  if (selectedVoice) utt.voice = selectedVoice;
+  utt.onstart = function(){ isSpeaking = true; updateTTSBtn(); };
+  utt.onend = function(){ isSpeaking = false; updateTTSBtn(); };
+  utt.onerror = function(){ isSpeaking = false; updateTTSBtn(); };
+  synth.speak(utt);
+}
+
+function updateTTSBtn() {
+  var btn = document.getElementById('ttsBtn');
+  if (!btn) return;
+  if (isSpeaking) {
+    btn.classList.add('speaking');
+    btn.querySelector('.tts-icon').textContent = '⏹';
+    btn.querySelector('.tts-label').textContent = 'Dừng';
+  } else {
+    btn.classList.remove('speaking');
+    btn.querySelector('.tts-icon').textContent = '🔊';
+    btn.querySelector('.tts-label').textContent = 'Nghe câu hỏi';
+  }
+}
+
+/* ─── INIT VOICES ─── */
+if (typeof speechSynthesis === 'undefined') {
+  document.getElementById('noVoice').style.display = 'block';
+  document.getElementById('voicePanel').style.display = 'none';
+} else {
+  if (synth.onvoiceschanged !== undefined) {
+    synth.onvoiceschanged = loadVoices;
+  }
+  loadVoices(); // also call immediately (some browsers populate synchronously)
+}
+
+/* ─── CONTROLS ─── */
+function setMode(m){
+  mode=m;
+  document.getElementById('bord').classList.toggle('active',m==='order');
+  document.getElementById('bran').classList.toggle('active',m==='random');
+  if(cur!==null)render();
+}
+
+function selTopic(i){
+  stopSpeech();
+  cur=i; idx=0;
+  var t=topics[i];
+  sh=mode==='random'?[...t.qs].sort(function(){return Math.random()-.5}):[...t.qs];
+  document.querySelectorAll('.tbtn').forEach(function(b,j){b.classList.toggle('active',j===i);});
+  render();
+}
+
+function render(){
+  stopSpeech();
+  var t=topics[cur], q=sh[idx];
+  var hl=[...H[q.h],...BT].join('<br>');
+  document.getElementById('area').innerHTML=
+    '<div class="card">'+
+    '<div class="qmeta">'+
+    '<span class="qtag" style="background:'+t.c+';color:'+t.t+'">'+t.name+'</span>'+
+    '<span class="qnum">Câu '+q.n+' &mdash; '+(idx+1)+'/'+sh.length+'</span>'+
+    '</div>'+
+    '<div class="qtxt" id="qtxt">'+q.q+'</div>'+
+    '<div class="acts">'+
+    '<button class="btn-tts" id="ttsBtn" onclick="speakQuestion(document.getElementById(\'qtxt\').textContent)">'+
+      '<span class="tts-icon">🔊</span><span class="tts-label">Nghe câu hỏi</span>'+
+    '</button>'+
+    '<button class="btn" onclick="tog(\'hb\')">💡 Gợi ý ngôn ngữ</button>'+
+    '<button class="btn" onclick="tog(\'sb\')">✅ Xem câu mẫu</button>'+
+    '</div>'+
+    '<div class="hbox" id="hb"><div class="htitle">Useful Language</div><div class="hline">'+hl+'</div></div>'+
+    '<div class="sbox" id="sb"><div class="stitle">Câu trả lời mẫu</div><div class="stxt">'+q.s+'</div></div>'+
+    '</div>'+
+    '<div class="navrow">'+
+    '<span class="prog">'+(idx+1)+' / '+sh.length+' câu</span>'+
+    '<div class="navbtns">'+
+    '<button class="btn" onclick="mv(-1)">← Trước</button>'+
+    '<button class="btn btnp" onclick="mv(1)">Tiếp theo →</button>'+
+    '</div></div>';
+}
+
+function tog(id){var e=document.getElementById(id);if(e)e.classList.toggle('on');}
+function mv(d){idx=(idx+d+sh.length)%sh.length; render();}
+
+/* ─── BUILD TOPIC BUTTONS ─── */
+var tp=document.getElementById('tp');
+topics.forEach(function(t,i){
+  var b=document.createElement('button');
+  b.className='tbtn';
+  b.innerHTML=t.name+'<span class="counter">'+t.qs.length+'</span>';
+  b.onclick=function(){selTopic(i);};
+  tp.appendChild(b);
+});
+</script>
+</body>
+</html>
