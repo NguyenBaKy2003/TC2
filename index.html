@@ -207,52 +207,36 @@ var topics=[
 
 /* ─── STATE ─── */
 var cur=null, idx=0, mode='order', sh=[];
-
-/* ─── TTS ENGINE ─── */
 var synth = window.speechSynthesis;
 var voices = [];
 var selectedVoice = null;
 var currentSpeed = 0.9;
 var isSpeaking = false;
 
-function loadVoices() {
-  voices = synth.getVoices();
-  var sel = document.getElementById('voiceSel');
+function populateVoiceList() {
+  var v = synth.getVoices();
+  if (!v || v.length === 0) return false; // chưa sẵn sàng
+  voices = v;
 
-  // Filter: prefer English voices; label clearly
+  var sel = document.getElementById('voiceSel');
   var engVoices = voices.filter(function(v){ return v.lang.startsWith('en'); });
   var otherVoices = voices.filter(function(v){ return !v.lang.startsWith('en'); });
 
-  if (engVoices.length === 0 && otherVoices.length === 0) {
-    document.getElementById('noVoice').style.display = 'block';
-    document.getElementById('voicePanel').style.display = 'none';
-    return;
-  }
-
   sel.innerHTML = '';
+  selectedVoice = null;
 
-  // Group: English voices first
   if (engVoices.length > 0) {
     var grpEn = document.createElement('optgroup');
     grpEn.label = '🇬🇧 Tiếng Anh';
-    engVoices.forEach(function(v, i) {
+    engVoices.forEach(function(v) {
       var opt = document.createElement('option');
       opt.value = v.name;
-      // Flag by locale
       var flag = v.lang === 'en-US' ? '🇺🇸' : v.lang === 'en-GB' ? '🇬🇧' : v.lang === 'en-AU' ? '🇦🇺' : '🌐';
       opt.textContent = flag + ' ' + v.name + ' (' + v.lang + ')';
-      // Default: prefer Google US English, then any en-US
-      if (!selectedVoice && (v.name.toLowerCase().includes('google') && v.lang === 'en-US')) {
-        opt.selected = true;
-        selectedVoice = v;
-      }
+      if (!selectedVoice && v.lang === 'en-US') { opt.selected = true; selectedVoice = v; }
       grpEn.appendChild(opt);
     });
-    // Fallback default
-    if (!selectedVoice && engVoices.length > 0) {
-      selectedVoice = engVoices[0];
-      grpEn.children[0].selected = true;
-    }
+    if (!selectedVoice) { selectedVoice = engVoices[0]; grpEn.children[0].selected = true; }
     sel.appendChild(grpEn);
   }
 
@@ -269,6 +253,34 @@ function loadVoices() {
   }
 
   if (!selectedVoice && voices.length > 0) selectedVoice = voices[0];
+  return true;
+}
+
+function loadVoices() {
+  if (typeof speechSynthesis === 'undefined') {
+    document.getElementById('noVoice').style.display = 'block';
+    document.getElementById('voicePanel').style.display = 'none';
+    return;
+  }
+
+  // Thử load ngay
+  if (populateVoiceList()) return;
+
+  // Nếu chưa có → dùng sự kiện + polling backup
+  synth.onvoiceschanged = function() { populateVoiceList(); };
+
+  var attempts = 0;
+  var poll = setInterval(function() {
+    attempts++;
+    if (populateVoiceList() || attempts > 20) {
+      clearInterval(poll);
+      // Sau 20 lần (~4 giây) vẫn không có → báo lỗi
+      if (attempts > 20 && voices.length === 0) {
+        document.getElementById('noVoice').style.display = 'block';
+        document.getElementById('voicePanel').style.display = 'none';
+      }
+    }
+  }, 200);
 }
 
 function onVoiceChange() {
@@ -284,7 +296,7 @@ function onSpeedChange() {
 }
 
 function stopSpeech() {
-  if (synth.speaking || synth.pending) synth.cancel();
+  if (synth && (synth.speaking || synth.pending)) synth.cancel();
   isSpeaking = false;
   updateTTSBtn();
 }
@@ -323,15 +335,7 @@ function updateTTSBtn() {
 }
 
 /* ─── INIT VOICES ─── */
-if (typeof speechSynthesis === 'undefined') {
-  document.getElementById('noVoice').style.display = 'block';
-  document.getElementById('voicePanel').style.display = 'none';
-} else {
-  if (synth.onvoiceschanged !== undefined) {
-    synth.onvoiceschanged = loadVoices;
-  }
-  loadVoices(); // also call immediately (some browsers populate synchronously)
-}
+loadVoices();
 
 /* ─── CONTROLS ─── */
 function setMode(m){
